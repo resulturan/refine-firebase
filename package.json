@@ -1,0 +1,22 @@
+{
+  "name": "refine-firebase",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Resul TURAN",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^9.1.3"
+  },
+  "scripts": {
+    "test": "mocha",
+    "watch:test": "mocha --watch",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@pankod/refine": "^1.0.90",
+    "firebase": "^9.1.3",
+    "typescript": "^4.4.4",
+    "uuid": "^8.3.2"
+  }
+}
