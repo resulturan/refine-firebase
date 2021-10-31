@@ -1,31 +1,33 @@
 import { Auth, User } from "firebase/auth";
 
-export interface ILoginArgs {
+interface ILoginArgs {
     email: string;
     password: string;
     remember: boolean;
 }
 
-export interface ILoginProps {
+interface ILoginProps {
     setLocation: (location: string) => void;
 }
 
-export interface IRegisterProps {
+interface IRegisterProps {
     setReCaptchaContainer: (ref: any) => void;
 }
 
-export interface IRegisterArgs extends ILoginArgs {
+interface IRegisterArgs extends ILoginArgs {
     phone?: string;
     displayName?: string;
 }
 
-export interface IUser extends Partial<User> {
+interface IUser extends Partial<User> {
     email: string;
     name?: string;
 }
 
-export interface IAuthCallbacks {
+interface IAuthCallbacks {
     onRegister?: (user: User) => void;
     onLogin?: (user: User) => void;
     onLogout?: (auth:Auth) => any;
 }
+
+export { ILoginArgs, ILoginProps, IRegisterProps, IRegisterArgs, IUser, IAuthCallbacks };

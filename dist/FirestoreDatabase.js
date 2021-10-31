@@ -1,104 +1,90 @@
-import { Firestore, getDocs, getFirestore, collection, addDoc, doc, getDoc, updateDoc, deleteDoc, where, query, CollectionReference, DocumentData, Query, orderBy } from "firebase/firestore";
-import { ICreateData, IDeleteData, IDeleteManyData, IGetList, IGetMany, IGetOne, IPropsDatabase, IUpdateData, IUpdateManyData } from "./interfaces";
-import { BaseDatabase } from "./Database";
-import { CrudOperators } from "@pankod/refine";
-
-
-export class FirestoreDatabase extends BaseDatabase {
-    database: Firestore;
-
-    constructor (props: IPropsDatabase) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FirestoreDatabase = void 0;
+const firestore_1 = require("firebase/firestore");
+const Database_1 = require("./Database");
+class FirestoreDatabase extends Database_1.BaseDatabase {
+    database;
+    constructor(props) {
         super(props);
-        this.database = getFirestore();
-
+        this.database = (0, firestore_1.getFirestore)();
         this.getCollectionRef = this.getCollectionRef.bind(this);
         this.getFilterQuery = this.getFilterQuery.bind(this);
     }
-
-
-    getCollectionRef(resource: string) {
-        return collection(this.database, resource);
+    getCollectionRef(resource) {
+        return (0, firestore_1.collection)(this.database, resource);
     }
-
-    getDocRef(resource: string, id: string) {
-        return doc(this.database, resource, id);
+    getDocRef(resource, id) {
+        return (0, firestore_1.doc)(this.database, resource, id);
     }
-
-    getFilterQuery({ resource, sort, filters }: IGetList): (CollectionReference<DocumentData> | Query<DocumentData>) {
+    getFilterQuery({ resource, sort, filters }) {
         const ref = this.getCollectionRef(resource);
         let queryFilter = filters?.map(filter => {
             const operator = getFilterOperator(filter.operator);
-            return where(filter.field, operator, filter.value);
+            return (0, firestore_1.where)(filter.field, operator, filter.value);
         });
-        let querySorter = sort?.map(sorter => orderBy(sorter.field, sorter.order));
-
+        let querySorter = sort?.map(sorter => (0, firestore_1.orderBy)(sorter.field, sorter.order));
         if (queryFilter?.length && querySorter?.length) {
-            return query(ref, ...queryFilter, ...querySorter);
-        } else if (queryFilter?.length) {
-            return query(ref, ...queryFilter);
-        } else if (querySorter?.length) {
-            return query(ref, ...querySorter);
+            return (0, firestore_1.query)(ref, ...queryFilter, ...querySorter);
+        }
+        else if (queryFilter?.length) {
+            return (0, firestore_1.query)(ref, ...queryFilter);
+        }
+        else if (querySorter?.length) {
+            return (0, firestore_1.query)(ref, ...querySorter);
         }
         else {
             return ref;
         }
     }
-
-    async createData<TVariables = {}>(args: ICreateData<TVariables>): Promise<any> {
+    async createData(args) {
         try {
             const ref = this.getCollectionRef(args.resource);
             const payload = this.requestPayloadFactory(args.resource, args.variables);
-
-            const docRef = await addDoc(ref, payload);
-
+            const docRef = await (0, firestore_1.addDoc)(ref, payload);
             let data = {
                 id: docRef.id,
                 ...payload
             };
-
             return { data };
-        } catch (error) {
+        }
+        catch (error) {
             Promise.reject(error);
         }
     }
-
-    async createManyData<TVariables = {}>(args: ICreateData<TVariables>): Promise<any> {
+    async createManyData(args) {
         try {
-            var data = await this.createData(args)
-
+            var data = await this.createData(args);
             return { data };
-        } catch (error) {
+        }
+        catch (error) {
             Promise.reject(error);
         }
     }
-
-    async deleteData(args: IDeleteData): Promise<any> {
+    async deleteData(args) {
         try {
             const ref = this.getDocRef(args.resource, args.id);
-
-            await deleteDoc(ref);
-        } catch (error) {
+            await (0, firestore_1.deleteDoc)(ref);
+        }
+        catch (error) {
             Promise.reject(error);
         }
     }
-
-    async deleteManyData(args: IDeleteManyData): Promise<any> {
+    async deleteManyData(args) {
         try {
-            args.ids.forEach(async id => {
-                this.deleteData({ resource: args.resource, id })
+            args.ids.forEach(async (id) => {
+                this.deleteData({ resource: args.resource, id });
             });
-        } catch (error) {
+        }
+        catch (error) {
             Promise.reject(error);
         }
     }
-
-    async getList(args: IGetList): Promise<any> {
+    async getList(args) {
         try {
             const ref = this.getFilterQuery(args);
-            let data: any[] = [];
-
-            const querySnapshot = await getDocs(ref);
-
+            let data = [];
+            const querySnapshot = await (0, firestore_1.getDocs)(ref);
             querySnapshot.forEach(document => {
                 data.push(this.responsePayloadFactory(args.resource, {
                     id: document.id,
@@ -106,19 +92,16 @@ export class FirestoreDatabase extends BaseDatabase {
                 }));
             });
             return { data };
-
-        } catch (error) {
+        }
+        catch (error) {
             Promise.reject(error);
         }
     }
-
-    async getMany(args: IGetMany): Promise<any> {
+    async getMany(args) {
         try {
             const ref = this.getCollectionRef(args.resource);
-            let data: any[] = [];
-
-            const querySnapshot = await getDocs(ref);
-
+            let data = [];
+            const querySnapshot = await (0, firestore_1.getDocs)(ref);
             querySnapshot.forEach(document => {
                 if (args.ids.includes(document.id)) {
                     data.push(this.responsePayloadFactory(args.resource, {
@@ -128,75 +111,68 @@ export class FirestoreDatabase extends BaseDatabase {
                 }
             });
             return { data };
-        } catch (error) {
+        }
+        catch (error) {
             Promise.reject(error);
         }
     }
-
-    async getOne(args: IGetOne): Promise<any> {
+    async getOne(args) {
         try {
             if (args.resource && args.id) {
                 const docRef = this.getDocRef(args.resource, args.id);
-
-                const docSnap = await getDoc(docRef);
-
+                const docSnap = await (0, firestore_1.getDoc)(docRef);
                 const data = this.responsePayloadFactory(args.resource, { ...docSnap.data(), id: docSnap.id });
-
                 return { data };
             }
-
-        } catch (error: any) {
+        }
+        catch (error) {
             Promise.reject(error);
         }
     }
-
-    async updateData<TVariables = {}>(args: IUpdateData<TVariables>): Promise<any> {
+    async updateData(args) {
         try {
             if (args.id && args.resource) {
                 var ref = this.getDocRef(args.resource, args.id);
-                await updateDoc(ref, this.requestPayloadFactory(args.resource, args.variables));
+                await (0, firestore_1.updateDoc)(ref, this.requestPayloadFactory(args.resource, args.variables));
             }
-
             return { data: args.variables };
-        } catch (error) {
+        }
+        catch (error) {
             Promise.reject(error);
         }
     }
-    async updateManyData<TVariables = {}>(args: IUpdateManyData<TVariables>): Promise<any> {
+    async updateManyData(args) {
         try {
-            args.ids.forEach(async id => {
+            args.ids.forEach(async (id) => {
                 var ref = this.getDocRef(args.resource, id);
-                await updateDoc(ref, this.requestPayloadFactory(args.resource, args.variables));
+                await (0, firestore_1.updateDoc)(ref, this.requestPayloadFactory(args.resource, args.variables));
             });
-
-        } catch (error) {
+        }
+        catch (error) {
             Promise.reject(error);
         }
     }
 }
-
-function getFilterOperator(operator: CrudOperators) {
+exports.FirestoreDatabase = FirestoreDatabase;
+function getFilterOperator(operator) {
     switch (operator) {
         case "lt":
             return "<";
         case "lte":
             return "<=";
-
         case "gt":
             return ">";
         case "gte":
             return ">=";
-
         case "eq":
             return "==";
         case "ne":
             return "!=";
-
         case "nin":
             return "not-in";
-
         case "in":
         default:
             return "in";
     }
 }
+//# sourceMappingURL=FirestoreDatabase.js.map

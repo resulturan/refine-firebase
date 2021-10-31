@@ -1,3 +1,4 @@
+import { FirebaseApp } from "@firebase/app";
 import { MetaDataQuery, Pagination, CrudSorting, CrudFilters, CrudFilter } from "@pankod/refine/dist/interfaces";
 
 interface ICreateData<TVariables> {
@@ -52,3 +53,11 @@ interface ICustomMethod {
     headers?: {};
     metaData?: MetaDataQuery;
 }
+
+interface IPropsDatabase {
+    firebaseApp?: FirebaseApp,
+    requestPayloadFactory?: (resource: string, data: any) => any,
+    responsePayloadFactory?: (resource: string, data: any) => any,
+}
+
+export { IPropsDatabase, ICustomMethod, IGetList, IGetMany, IGetOne, IDeleteManyData, IDeleteData, IUpdateManyData, IUpdateData, ICreateData };

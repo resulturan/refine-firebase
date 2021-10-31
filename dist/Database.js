@@ -1,13 +1,11 @@
-import { IDataContextProvider } from "@pankod/refine/dist/interfaces";
-import { IPropsDatabase } from "./interfaces/IDataBase";
-
-export class BaseDatabase {
-    database: any;
-    props: IPropsDatabase;
-    constructor (props: IPropsDatabase) {
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BaseDatabase = void 0;
+class BaseDatabase {
+    database;
+    props;
+    constructor(props) {
         this.props = props;
-
         this.getDataProvider = this.getDataProvider.bind(this);
         this.createData = this.createData.bind(this);
         this.createManyData = this.createManyData.bind(this);
@@ -23,68 +21,47 @@ export class BaseDatabase {
         this.requestPayloadFactory = this.requestPayloadFactory.bind(this);
         this.responsePayloadFactory = this.responsePayloadFactory.bind(this);
     }
-
-    requestPayloadFactory(resource: string, data: any): any {
+    requestPayloadFactory(resource, data) {
         if (this.props.requestPayloadFactory) {
             return (this.props.requestPayloadFactory(resource, data));
-        } else {
+        }
+        else {
             return { ...data };
         }
     }
-
-    responsePayloadFactory(resource: string, data: any): any {
+    responsePayloadFactory(resource, data) {
         if (this.props?.responsePayloadFactory) {
             return (this.props?.responsePayloadFactory(resource, data));
-        } else {
+        }
+        else {
             return { ...data };
         }
     }
-
-    async createData(args: any): Promise<any> {
-
+    async createData(args) {
     }
-
-
-    async createManyData(args: any): Promise<any> {
-
+    async createManyData(args) {
     }
-
-    async deleteData(args: any): Promise<any> {
-
+    async deleteData(args) {
     }
-
-    async deleteManyData(args: any): Promise<any> {
-
+    async deleteManyData(args) {
     }
-
-    async getList(args: any): Promise<any> {
-
+    async getList(args) {
     }
-
-    async getMany(args: any): Promise<any> {
-
+    async getMany(args) {
     }
-
-    async getOne(args: any): Promise<any> {
-
+    async getOne(args) {
     }
-
-    async updateData(args: any): Promise<any> {
-
+    async updateData(args) {
     }
-    async updateManyData(args: any): Promise<any> {
-
+    async updateManyData(args) {
     }
-
-    async customMethod(args: any): Promise<any> {
-
-    };
-
+    async customMethod(args) {
+    }
+    ;
     getAPIUrl() {
         return "";
     }
-
-    getDataProvider(): IDataContextProvider {
+    getDataProvider() {
         return {
             create: this.createData,
             createMany: this.createManyData,
@@ -100,3 +77,5 @@ export class BaseDatabase {
         };
     }
 }
+exports.BaseDatabase = BaseDatabase;
+//# sourceMappingURL=Database.js.map

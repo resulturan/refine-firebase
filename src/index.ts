@@ -2,9 +2,9 @@ import { FirebaseOptions, initializeApp } from "@firebase/app";
 import { FirebaseAuth } from "./firebaseAuth";
 import { FirestoreDatabase } from "./firestoreDatabase";
 import { FirebaseDatabase } from "./firebaseDatabase";
-import { IAuthCallbacks } from "./interfaces/ILogin";
+import { IRefineFirebase, IAuthCallbacks } from "./interfaces";
 
-export default function initializeFirebase(
+function initializeFirebase(
     firebaseConfig: FirebaseOptions,
     options: { useAuth: boolean, useRealtimeDatabase: boolean, useFirestore: boolean, },
     authActions: IAuthCallbacks,
@@ -12,25 +12,32 @@ export default function initializeFirebase(
         requestPayloadFactory: (resource: string, data: any) => any;
         responsePayloadFactory: (resource: string, data: any) => any;
     }
-) {
+): IRefineFirebase {
     var firebaseApp = initializeApp(firebaseConfig);
 
+    var result: IRefineFirebase = { firebaseApp };
+
     if (options.useAuth) {
-        var firebaseAuth = new FirebaseAuth(authActions);
-    };
+        result.firebaseAuth = new FirebaseAuth(authActions);
+    }
 
     if (options.useRealtimeDatabase) {
-        var firebaseDatabase = new FirebaseDatabase(firebaseApp, payloadFactoryMethods.requestPayloadFactory, payloadFactoryMethods.responsePayloadFactory);
-    };
+        result.firebaseDatabase = new FirebaseDatabase({
+            firebaseApp,
+            requestPayloadFactory: payloadFactoryMethods.requestPayloadFactory,
+            responsePayloadFactory: payloadFactoryMethods.responsePayloadFactory
+        });
+    }
 
     if (options.useFirestore) {
-        var firestoreDatabase = new FirestoreDatabase(payloadFactoryMethods.requestPayloadFactory, payloadFactoryMethods.responsePayloadFactory);
-    };
+        result.firestoreDatabase = new FirestoreDatabase({
+            requestPayloadFactory: payloadFactoryMethods.requestPayloadFactory,
+            responsePayloadFactory: payloadFactoryMethods.responsePayloadFactory
+        });
+    }
 
-    return {
-        firebaseApp,
-        firebaseAuth,
-        firestoreDatabase,
-        firebaseDatabase
-    };
+    return result;
 }
+
+export default initializeFirebase;
+export * as types from "./interfaces";

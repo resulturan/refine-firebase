@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "outDir": "dist",
+        "target": "esnext",
+        "module": "CommonJS",
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "sourceMap": true,
+        "strict": true,
+        "skipLibCheck": true,
+        "baseUrl": "src",
+    },
+    "compileOnSave": true,
+    "include": ["src"],
+}
