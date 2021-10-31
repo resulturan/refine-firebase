@@ -12,7 +12,8 @@
     "typescript": "^4.4.4"
   },
   "scripts": {
-    "dev": "tsc --watch --preserveWatchOutput"
+    "dev": "tsc --watch --preserveWatchOutput",
+    "build": "tsc"
   },
   "dependencies": {
     "@pankod/refine": "^1.0.90",
@@ -20,7 +21,7 @@
     "uuid": "^8.3.2"
   },
   "files": [
-    "dist"
+    "lib"
   ],
   "repository": {
     "type": "git",
