@@ -1,8 +1,6 @@
-import { IDataContextProvider } from "@pankod/refine/dist/interfaces";
-import { IPropsDatabase } from "./interfaces/IDataBase";
+import { IPropsDatabase, IDataContextProvider } from "./interfaces";
 
 export class BaseDatabase {
-    database: any;
     props: IPropsDatabase;
     constructor (props: IPropsDatabase) {
 
@@ -78,7 +76,7 @@ export class BaseDatabase {
 
     async customMethod(args: any): Promise<any> {
 
-    };
+    }
 
     getAPIUrl() {
         return "";

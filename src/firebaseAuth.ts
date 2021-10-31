@@ -1,7 +1,6 @@
-import { IAuthContext } from "@pankod/refine/dist/interfaces";
 import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, updateEmail, updatePassword, getAuth, signOut, Auth, RecaptchaVerifier, RecaptchaParameters, updateProfile, sendEmailVerification, browserLocalPersistence, browserSessionPersistence } from "firebase/auth";
 
-import { IRegisterArgs, ILoginArgs, IUser, IAuthCallbacks } from "./interfaces/ILogin";
+import { IRegisterArgs, ILoginArgs, IUser, IAuthCallbacks, IAuthContext } from "./interfaces";
 
 export class FirebaseAuth {
 

@@ -1,10 +1,14 @@
 {
   "name": "refine-firebase",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Firebase Tool for Refine",
   "main": "index.js",
   "author": "Resul TURAN",
   "license": "MIT",
+  "keywords": [
+    "Refine",
+    "Firebase"
+  ],
   "devDependencies": {
     "@types/uuid": "^8.3.1",
     "chai": "^4.3.4",
@@ -16,7 +20,6 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@pankod/refine": "^1.0.90",
     "firebase": "^9.1.3",
     "uuid": "^8.3.2"
   },

@@ -1,11 +1,13 @@
 {
     "compilerOptions": {
-      "target": "esnext",
-      "module": "commonjs",
-      "declaration": true,
-      "outDir": "./lib",
-      "strict": true
+        "incremental": true,
+        "target": "esnext",
+        "module": "commonjs",
+        "declaration": true,
+        "outDir": "lib",
+        "esModuleInterop": true,
+        "skipLibCheck": true,
     },
     "include": ["src"],
     "exclude": ["node_modules", "**/__tests__/*"]
-  }
+}
