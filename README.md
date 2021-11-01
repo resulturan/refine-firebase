@@ -62,7 +62,7 @@ export const firebaseDatabase = new FirebaseDatabase();
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | FirebaseAuth      | Provider for generating [firebase-authentication] and [IAuthContext] for @pankod/refine auth-provider                           |
 | FirestoreDatabase | Provider for initializing [Firestore] instance with the provided FirebaseApp and creating @pankod/refine [dataProvider]         |
-| FirestoreDatabase | Provider for initializing [Realtime-Database] instance with the provided FirebaseApp and creating @pankod/refine [dataProvider] |
+| FirebaseDatabase | Provider for initializing [Realtime-Database] instance with the provided FirebaseApp and creating @pankod/refine [dataProvider] |
 
 <!-- ### **initializeFirebase**
 
