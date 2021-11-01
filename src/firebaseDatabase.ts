@@ -8,9 +8,9 @@ import { v4 as uuidv4 } from 'uuid';
 export class FirebaseDatabase extends BaseDatabase {
     database: Database;
 
-    constructor (props: IPropsDatabase) {
+    constructor (props?: IPropsDatabase) {
         super(props);
-        this.database = getDatabase(props.firebaseApp);
+        this.database = getDatabase(props?.firebaseApp);
         this.getRef = this.getRef.bind(this);
     }
 

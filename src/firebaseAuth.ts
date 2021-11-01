@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, updateEmail, updatePassword, getAuth, signOut, Auth, RecaptchaVerifier, RecaptchaParameters, updateProfile, sendEmailVerification, browserLocalPersistence, browserSessionPersistence } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, updateEmail, updatePassword, getAuth, signOut, Auth, RecaptchaVerifier, updateProfile, sendEmailVerification, browserLocalPersistence, browserSessionPersistence, RecaptchaParameters } from "firebase/auth";
 
 import { IRegisterArgs, ILoginArgs, IUser, IAuthCallbacks, IAuthContext } from "./interfaces";
 
@@ -7,7 +7,7 @@ export class FirebaseAuth {
     auth: Auth;
     authActions: IAuthCallbacks;
 
-    constructor (authActions: IAuthCallbacks) {
+    constructor (authActions?: IAuthCallbacks) {
         this.auth = getAuth();
         this.auth.useDeviceLanguage();
 
@@ -25,35 +25,30 @@ export class FirebaseAuth {
         this.authActions = authActions;
     }
 
-    private async handleLogOut() {
+    public async handleLogOut() {
         await signOut(this.auth);
         await this.authActions?.onLogout?.(this.auth);
     }
 
-    private async handleRegister(
-        args: IRegisterArgs,
-        recaptchaVerifier: RecaptchaVerifier,
-    ) {
+    public async handleRegister(args: IRegisterArgs) {
         try {
             const { email, password, displayName } = args;
-            const token = await recaptchaVerifier.verify();
 
-            if (token) {
-                const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
-                await sendEmailVerification(userCredential.user);
-                if (userCredential.user) {
-                    if (displayName) {
-                        await updateProfile(userCredential.user, { displayName });
-                    }
-                    this.authActions?.onRegister?.(userCredential.user);
+            const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+            await sendEmailVerification(userCredential.user);
+            if (userCredential.user) {
+                if (displayName) {
+                    await updateProfile(userCredential.user, { displayName });
                 }
+                this.authActions?.onRegister?.(userCredential.user);
             }
+
         } catch (error) {
             Promise.reject(error);
         }
     }
 
-    private async handleLogIn({ email, password, remember }: ILoginArgs) {
+    public async handleLogIn({ email, password, remember }: ILoginArgs) {
         try {
             if (this.auth) {
                 await this.auth.setPersistence(remember ? browserLocalPersistence : browserSessionPersistence);
@@ -114,7 +109,7 @@ export class FirebaseAuth {
         }
     }
 
-    private async getPermissions(): Promise<any> {
+    public async getPermissions(): Promise<any> {
         if (this.auth) {
             Promise.resolve();
         } else {
@@ -122,7 +117,7 @@ export class FirebaseAuth {
         }
     }
 
-    public createRecaptcha(containerOrId: string | HTMLDivElement, parameters: RecaptchaParameters) {
+    public createRecaptcha(containerOrId: string | HTMLDivElement, parameters?: RecaptchaParameters) {
         return new RecaptchaVerifier(containerOrId, parameters, this.auth);
     }
 

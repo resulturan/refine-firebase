@@ -2,7 +2,7 @@ import { IPropsDatabase, IDataContextProvider } from "./interfaces";
 
 export class BaseDatabase {
     props: IPropsDatabase;
-    constructor (props: IPropsDatabase) {
+    constructor (props?: IPropsDatabase) {
 
         this.props = props;
 
@@ -23,7 +23,7 @@ export class BaseDatabase {
     }
 
     requestPayloadFactory(resource: string, data: any): any {
-        if (this.props.requestPayloadFactory) {
+        if (this.props?.requestPayloadFactory) {
             return (this.props.requestPayloadFactory(resource, data));
         } else {
             return { ...data };
@@ -41,7 +41,6 @@ export class BaseDatabase {
     async createData(args: any): Promise<any> {
 
     }
-
 
     async createManyData(args: any): Promise<any> {
 

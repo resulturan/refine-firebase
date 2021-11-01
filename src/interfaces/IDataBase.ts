@@ -1,41 +1,41 @@
 import { FirebaseApp } from "@firebase/app";
-import { MetaDataQuery, Pagination, CrudSorting, CrudFilters, CrudFilter } from "@pankod/refine/dist/interfaces";
+import { MetaDataQuery, Pagination, CrudSorting, CrudFilters, CrudFilter } from "./IDataContext";
 
-interface ICreateData<TVariables> {
+declare interface ICreateData<TVariables> {
     resource: string;
     variables: TVariables;
     metaData?: MetaDataQuery;
 }
 
-interface IUpdateData<TVariables> extends ICreateData<TVariables> {
+declare interface IUpdateData<TVariables> extends ICreateData<TVariables> {
     id?: string;
 }
 
-interface IUpdateManyData<TVariables> extends ICreateData<TVariables> {
+declare interface IUpdateManyData<TVariables> extends ICreateData<TVariables> {
     ids: Array<string>;
 }
 
-interface IDeleteData {
+declare interface IDeleteData {
     resource: string;
     id: string;
     metaData?: MetaDataQuery;
 }
 
-interface IDeleteManyData extends Omit<IDeleteData, "id"> {
+declare interface IDeleteManyData extends Omit<IDeleteData, "id"> {
     ids: Array<string>;
 }
 
-interface IGetOne {
+declare interface IGetOne {
     resource: string;
     id: string;
     metaData?: MetaDataQuery;
 }
 
-interface IGetMany extends Omit<IGetOne, "id"> {
+declare interface IGetMany extends Omit<IGetOne, "id"> {
     ids: Array<string>;
 }
 
-interface IGetList {
+declare interface IGetList {
     resource: string;
     pagination?: Pagination;
     sort?: CrudSorting;
@@ -43,7 +43,7 @@ interface IGetList {
     metaData?: MetaDataQuery;
 }
 
-interface ICustomMethod {
+declare interface ICustomMethod {
     url: string;
     method: "get" | "delete" | "head" | "options" | "post" | "put" | "patch";
     sort?: CrudSorting;
@@ -54,7 +54,7 @@ interface ICustomMethod {
     metaData?: MetaDataQuery;
 }
 
-interface IPropsDatabase {
+declare interface IPropsDatabase {
     firebaseApp?: FirebaseApp,
     requestPayloadFactory?: (resource: string, data: any) => any,
     responsePayloadFactory?: (resource: string, data: any) => any,

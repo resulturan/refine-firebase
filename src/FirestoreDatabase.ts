@@ -6,7 +6,7 @@ import { BaseDatabase } from "./Database";
 export class FirestoreDatabase extends BaseDatabase {
     database: Firestore;
 
-    constructor (props: IPropsDatabase) {
+    constructor (props?: IPropsDatabase) {
         super(props);
         this.database = getFirestore();
 
@@ -95,6 +95,8 @@ export class FirestoreDatabase extends BaseDatabase {
         try {
             const ref = this.getFilterQuery(args);
             let data: any[] = [];
+            const current = args.pagination?.current ?? 1;
+            const limit = args.pagination?.pageSize || 10;
 
             const querySnapshot = await getDocs(ref);
 

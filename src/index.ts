@@ -1,43 +1,19 @@
-import { FirebaseOptions, initializeApp } from "@firebase/app";
+import { initializeApp as initializeFirebase } from "@firebase/app";
 import { FirebaseAuth } from "./firebaseAuth";
-import { FirestoreDatabase } from "./firestoreDatabase";
 import { FirebaseDatabase } from "./firebaseDatabase";
-import { IRefineFirebase, IAuthCallbacks } from "./interfaces";
+import { FirestoreDatabase } from "./FirestoreDatabase";
+import { IAuthCallbacks, IPropsDatabase } from "./interfaces";
 
-function initializeFirebase(
-    firebaseConfig: FirebaseOptions,
-    options: { useAuth: boolean, useRealtimeDatabase: boolean, useFirestore: boolean, },
-    authActions: IAuthCallbacks,
-    payloadFactoryMethods: {
-        requestPayloadFactory: (resource: string, data: any) => any;
-        responsePayloadFactory: (resource: string, data: any) => any;
-    }
-): IRefineFirebase {
-    var firebaseApp = initializeApp(firebaseConfig);
-
-    var result: IRefineFirebase = { firebaseApp };
-
-    if (options.useAuth) {
-        result.firebaseAuth = new FirebaseAuth(authActions);
-    }
-
-    if (options.useRealtimeDatabase) {
-        result.firebaseDatabase = new FirebaseDatabase({
-            firebaseApp,
-            requestPayloadFactory: payloadFactoryMethods.requestPayloadFactory,
-            responsePayloadFactory: payloadFactoryMethods.responsePayloadFactory
-        });
-    }
-
-    if (options.useFirestore) {
-        result.firestoreDatabase = new FirestoreDatabase({
-            requestPayloadFactory: payloadFactoryMethods.requestPayloadFactory,
-            responsePayloadFactory: payloadFactoryMethods.responsePayloadFactory
-        });
-    }
-
-    return result;
+function useFirestoreDatabase(props?: IPropsDatabase) {
+    return new FirestoreDatabase(props);
 }
 
-export default initializeFirebase;
-export * as types from "./interfaces";
+function useFirebaseDatabase(props?: IPropsDatabase) {
+    return new FirebaseDatabase(props);
+}
+
+function useFirebaseAuth(props?: IAuthCallbacks) {
+    return new FirebaseAuth(props);
+}
+
+export { initializeFirebase, FirestoreDatabase, FirebaseDatabase, FirebaseAuth };

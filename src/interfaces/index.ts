@@ -3,7 +3,7 @@ import { FirebaseDatabase } from "../firebaseDatabase";
 import { FirestoreDatabase } from "../FirestoreDatabase";
 import { FirebaseApp } from "@firebase/app";
 
-interface IRefineFirebase {
+declare interface IRefineFirebase {
     firebaseApp: FirebaseApp;
     firebaseAuth?: FirebaseAuth;
     firestoreDatabase?: FirestoreDatabase;

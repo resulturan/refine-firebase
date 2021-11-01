@@ -2,6 +2,21 @@ export declare type BaseRecord = {
     id?: string;
     [key: string]: any;
 };
+export declare type VariableOptions = {
+    type?: string;
+    name?: string;
+    value: any;
+    list?: boolean;
+    required?: boolean;
+} | {
+    [k: string]: any;
+};
+export declare type Fields = Array<string | object | NestedField>;
+export declare type NestedField = {
+    operation: string;
+    variables: QueryBuilderOptions[];
+    fields: Fields;
+};
 export interface QueryBuilderOptions {
     operation?: string;
     fields?: Fields;
