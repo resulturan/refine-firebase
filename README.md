@@ -10,7 +10,7 @@ npm i refine-firebase
 
 ## Usage
 
-1. **Create a config file and initialize firebase.**
+**1. Create a config file and initialize firebase.**
 
 _firebaseConfig.js_
 
@@ -30,7 +30,7 @@ export const firebaseConfig = {
 export const firebaseApp = initializeFirebase(firebaseConfig);
 ```
 
-2. **Create tools according to your needs.**
+**2. Create tools according to your needs.**
 
 _firebaseConfig.js_
 
@@ -48,6 +48,19 @@ export const firestoreDatabase = new FirestoreDatabase();
 export const firebaseDatabase = new FirebaseDatabase();
 ```
 
+**3. Use dataProviders for Refine**
+
+_App.js_
+
+```js
+import {firebaseAuth, firestoreDatabase }from "./firebaseConfig";
+
+ <Refine
+      dataProvider={firestoreDatabase.getDataProvider()}
+      authProvider={firebaseAuth.getAuthProvider()}
+    >
+```
+
 ## API Reference
 
 ### **Functions**
@@ -62,7 +75,7 @@ export const firebaseDatabase = new FirebaseDatabase();
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | FirebaseAuth      | Provider for generating [firebase-authentication] and [IAuthContext] for @pankod/refine auth-provider                           |
 | FirestoreDatabase | Provider for initializing [Firestore] instance with the provided FirebaseApp and creating @pankod/refine [dataProvider]         |
-| FirebaseDatabase | Provider for initializing [Realtime-Database] instance with the provided FirebaseApp and creating @pankod/refine [dataProvider] |
+| FirebaseDatabase  | Provider for initializing [Realtime-Database] instance with the provided FirebaseApp and creating @pankod/refine [dataProvider] |
 
 <!-- ### **initializeFirebase**
 
