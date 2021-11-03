@@ -104,8 +104,10 @@ export class FirebaseAuth {
     }
 
     private async handleCheckAuth() {
-        if (!this.auth?.currentUser) {
-            await Promise.reject();
+        if (this.auth?.currentUser) {
+            Promise.resolve();
+        } else {
+            Promise.reject({ redirectPath: "/login" });
         }
     }
 
@@ -114,7 +116,7 @@ export class FirebaseAuth {
             var idTokenResult = await getIdTokenResult(this.auth.currentUser);
             return idTokenResult?.claims
         } else {
-            Promise.reject();
+            Promise.reject("User is not found");
         }
     }
 
