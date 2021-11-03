@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, updateEmail, updatePassword, getAuth, signOut, Auth, RecaptchaVerifier, updateProfile, sendEmailVerification, browserLocalPersistence, browserSessionPersistence, RecaptchaParameters } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, updateEmail, updatePassword, getAuth, signOut, Auth, RecaptchaVerifier, updateProfile, sendEmailVerification, browserLocalPersistence, browserSessionPersistence, RecaptchaParameters, getIdTokenResult, ParsedToken } from "firebase/auth";
 
 import { IRegisterArgs, ILoginArgs, IUser, IAuthCallbacks, IAuthContext } from "./interfaces";
 
@@ -109,9 +109,10 @@ export class FirebaseAuth {
         }
     }
 
-    public async getPermissions(): Promise<any> {
+    public async getPermissions(): Promise<ParsedToken> {
         if (this.auth) {
-            Promise.resolve();
+            var idTokenResult = await getIdTokenResult(this.auth.currentUser, true);
+            return idTokenResult.claims
         } else {
             Promise.reject();
         }
