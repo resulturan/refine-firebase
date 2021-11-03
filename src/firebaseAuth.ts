@@ -111,8 +111,8 @@ export class FirebaseAuth {
 
     public async getPermissions(): Promise<ParsedToken> {
         if (this.auth?.currentUser) {
-            var idTokenResult = await getIdTokenResult(this.auth.currentUser, true);
-            return idTokenResult.claims
+            var idTokenResult = await getIdTokenResult(this.auth.currentUser);
+            return idTokenResult?.claims
         } else {
             Promise.reject();
         }
