@@ -44,7 +44,7 @@ export class FirebaseAuth {
             }
 
         } catch (error) {
-            Promise.reject(error);
+            return Promise.reject(error);
         }
     }
 
@@ -58,13 +58,13 @@ export class FirebaseAuth {
                 if (userToken) {
                     this.authActions?.onLogin?.(userCredential.user);
                 } else {
-                    await Promise.reject();
+                    return Promise.reject();
                 }
             } else {
-                await Promise.reject();
+                return Promise.reject();
             }
         } catch (error) {
-            Promise.reject(error);
+            return Promise.reject(error);
         }
     }
 
@@ -90,7 +90,7 @@ export class FirebaseAuth {
                 }
             }
         } catch (error) {
-            Promise.reject(error);
+            return Promise.reject(error);
         }
     }
 
@@ -105,9 +105,9 @@ export class FirebaseAuth {
 
     private async handleCheckAuth() {
         if (this.auth?.currentUser) {
-            Promise.resolve();
+            return Promise.resolve();
         } else {
-            Promise.reject({ redirectPath: "/login" });
+            return Promise.reject("User is not found");
         }
     }
 
@@ -116,7 +116,7 @@ export class FirebaseAuth {
             var idTokenResult = await getIdTokenResult(this.auth.currentUser);
             return idTokenResult?.claims
         } else {
-            Promise.reject("User is not found");
+            return Promise.reject("User is not found");
         }
     }
 
