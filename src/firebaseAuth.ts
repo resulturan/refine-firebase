@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, updateEmail, updatePassword, getAuth, signOut, Auth, RecaptchaVerifier, updateProfile, sendEmailVerification, browserLocalPersistence, browserSessionPersistence, RecaptchaParameters, getIdTokenResult, ParsedToken } from "firebase/auth";
-
+import { FirebaseApp } from "@firebase/app";
 import { IRegisterArgs, ILoginArgs, IUser, IAuthCallbacks, IAuthContext } from "./interfaces";
 
 export class FirebaseAuth {
@@ -7,8 +7,8 @@ export class FirebaseAuth {
     auth: Auth;
     authActions: IAuthCallbacks;
 
-    constructor (authActions?: IAuthCallbacks) {
-        this.auth = getAuth();
+    constructor (authActions?: IAuthCallbacks, firebaseApp?: FirebaseApp) {
+        this.auth = getAuth(firebaseApp);
         this.auth.useDeviceLanguage();
 
         this.getAuthProvider = this.getAuthProvider.bind(this);
