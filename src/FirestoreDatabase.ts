@@ -26,8 +26,12 @@ export class FirestoreDatabase extends BaseDatabase {
     getFilterQuery({ resource, sort, filters }: IGetList): (CollectionReference<DocumentData> | Query<DocumentData>) {
         const ref = this.getCollectionRef(resource);
         let queryFilter = filters?.map(filter => {
-            const operator = getFilterOperator(filter.operator);
-            return where(filter.field, operator, filter.value);
+            if (filter.operator !== "or") {
+                const operator = getFilterOperator(filter.operator);
+                return where(filter.field, operator, filter.value);
+            } else {
+                // TODO: implement "or" operator filters for firebase
+            }
         });
         let querySorter = sort?.map(sorter => orderBy(sorter.field, sorter.order));
 
