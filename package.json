@@ -1,6 +1,6 @@
 {
   "name": "refine-firebase",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "description": "Firebase Tool for Refine",
   "main": "lib/index.js",
   "author": "Resul TURAN",
