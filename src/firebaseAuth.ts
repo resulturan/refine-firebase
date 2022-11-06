@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, updateEmail, updatePassword, getAuth, signOut, Auth, RecaptchaVerifier, updateProfile, sendEmailVerification, browserLocalPersistence, browserSessionPersistence, RecaptchaParameters, getIdTokenResult, ParsedToken } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, updateEmail, updatePassword, getAuth, signOut, Auth, RecaptchaVerifier, updateProfile, sendEmailVerification, browserLocalPersistence, browserSessionPersistence, RecaptchaParameters, getIdTokenResult, ParsedToken, User as FirebaseUser } from "firebase/auth";
 import { FirebaseApp } from "@firebase/app";
 import { IRegisterArgs, ILoginArgs, IUser, IAuthCallbacks, IAuthContext } from "./interfaces";
 
@@ -102,9 +102,18 @@ export class FirebaseAuth {
             name: user?.displayName || ""
         };
     }
+    
+    private getFirebaseUser(): Promise<FirebaseUser> {
+        return new Promise<FirebaseUser>((resolve, reject) => {
+            const unsubscribe = this.auth?.onAuthStateChanged(user => {
+            unsubscribe();
+            resolve(user);
+            }, reject);
+        });
+    }
 
     private async handleCheckAuth() {
-        if (this.auth?.currentUser) {
+        if (await this.getFirebaseUser()) {
             return Promise.resolve();
         } else {
             return Promise.reject("User is not found");
