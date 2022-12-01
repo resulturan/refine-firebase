@@ -5,7 +5,7 @@ import { IRegisterArgs, ILoginArgs, IUser, IAuthCallbacks, IAuthContext } from "
 export class FirebaseAuth {
 
     auth: Auth;
-    authActions: IAuthCallbacks;
+    authActions: IAuthCallbacks | undefined;
 
     constructor (authActions?: IAuthCallbacks, firebaseApp?: FirebaseApp) {
         this.auth = getAuth(firebaseApp);
@@ -107,7 +107,7 @@ export class FirebaseAuth {
         return new Promise<FirebaseUser>((resolve, reject) => {
             const unsubscribe = this.auth?.onAuthStateChanged(user => {
             unsubscribe();
-            resolve(user);
+            resolve(user as FirebaseUser | PromiseLike<FirebaseUser>);
             }, reject);
         });
     }
@@ -130,7 +130,7 @@ export class FirebaseAuth {
     }
 
     public createRecaptcha(containerOrId: string | HTMLDivElement, parameters?: RecaptchaParameters) {
-        return new RecaptchaVerifier(containerOrId, parameters, this.auth);
+        return new RecaptchaVerifier(containerOrId, parameters as RecaptchaParameters, this.auth);
     }
 
     public getAuthProvider(): IAuthContext {

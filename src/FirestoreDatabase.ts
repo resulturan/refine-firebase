@@ -8,7 +8,7 @@ export class FirestoreDatabase extends BaseDatabase {
 
     constructor (props?: IPropsDatabase) {
         super(props);
-        this.database = getFirestore(props.firebaseApp);
+        this.database = getFirestore(props?.firebaseApp);
 
         this.getCollectionRef = this.getCollectionRef.bind(this);
         this.getFilterQuery = this.getFilterQuery.bind(this);

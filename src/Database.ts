@@ -1,10 +1,13 @@
-import { IPropsDatabase, IDataContextProvider } from "./interfaces";
+import { IPropsDatabase } from "./interfaces";
+import { DataProvider } from "@pankod/refine-core";
 
 export class BaseDatabase {
-    props: IPropsDatabase;
+    props: IPropsDatabase | undefined;
     constructor (props?: IPropsDatabase) {
 
         this.props = props;
+
+        console.log("dataprovider - INITIAL PROPS", props);
 
         this.getDataProvider = this.getDataProvider.bind(this);
         this.createData = this.createData.bind(this);
@@ -81,7 +84,7 @@ export class BaseDatabase {
         return "";
     }
 
-    getDataProvider(): IDataContextProvider {
+    getDataProvider(): DataProvider {
         return {
             create: this.createData,
             createMany: this.createManyData,

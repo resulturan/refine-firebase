@@ -42,4 +42,4 @@ declare interface IAuthContext {
     [key: string]: any;
 }
 
-export { ILoginArgs, ILoginProps, IRegisterProps, IRegisterArgs, IUser, IAuthCallbacks, IAuthContext, TLogoutData };
+export type { ILoginArgs, ILoginProps, IRegisterProps, IRegisterArgs, IUser, IAuthCallbacks, IAuthContext, TLogoutData };

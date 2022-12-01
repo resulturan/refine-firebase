@@ -59,4 +59,4 @@ declare interface IPropsDatabase {
     requestPayloadFactory?: (resource: string, data: any) => any,
     responsePayloadFactory?: (resource: string, data: any) => any,
 }
-export { IPropsDatabase, ICustomMethod, IGetList, IGetMany, IGetOne, IDeleteManyData, IDeleteData, IUpdateManyData, IUpdateData, ICreateData };
+export type { IPropsDatabase, ICustomMethod, IGetList, IGetMany, IGetOne, IDeleteManyData, IDeleteData, IUpdateManyData, IUpdateData, ICreateData };
