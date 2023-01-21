@@ -1,3 +1,9 @@
+![npm](https://img.shields.io/npm/v/refine-firebase)
+![npm bundle size (version)](https://img.shields.io/bundlephobia/minzip/refine-firebase/1.1.1)
+![npm](https://img.shields.io/npm/dt/refine-firebase)
+![GitHub](https://img.shields.io/github/license/resulturan/refine-firebase)
+![GitHub Repo stars](https://img.shields.io/github/stars/resulturan/refine-firebase?style=social)
+
 # Refine-Firebase
 
 > Firebase integration tool for your Refine app
