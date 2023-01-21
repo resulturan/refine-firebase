@@ -54,9 +54,9 @@ declare interface ICustomMethod {
     metaData?: MetaDataQuery;
 }
 
-declare interface IPropsDatabase {
+declare interface IDatabaseOptions {
     firebaseApp?: FirebaseApp,
     requestPayloadFactory?: (resource: string, data: any) => any,
     responsePayloadFactory?: (resource: string, data: any) => any,
 }
-export { IPropsDatabase, ICustomMethod, IGetList, IGetMany, IGetOne, IDeleteManyData, IDeleteData, IUpdateManyData, IUpdateData, ICreateData };
+export { IDatabaseOptions, ICustomMethod, IGetList, IGetMany, IGetOne, IDeleteManyData, IDeleteData, IUpdateManyData, IUpdateData, ICreateData };

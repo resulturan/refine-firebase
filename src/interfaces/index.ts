@@ -11,6 +11,6 @@ declare interface IRefineFirebase {
 }
 
 export { IRefineFirebase };
-export { IPropsDatabase, ICustomMethod, IGetList, IGetMany, IGetOne, IDeleteManyData, IDeleteData, IUpdateManyData, IUpdateData, ICreateData } from "./IDataBase";
-export { ILoginArgs, ILoginProps, IRegisterProps, IRegisterArgs, IUser, IAuthCallbacks, IAuthContext, TLogoutData } from "./ILogin";
-export { IDataContextProvider, CrudOperators } from "./IDataContext";
+export * from "./IDataBase";
+export * from "./ILogin";
+export * from "./IDataContext";

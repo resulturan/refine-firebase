@@ -1,14 +1,14 @@
 import { Firestore, getDocs, getFirestore, collection, addDoc, doc, getDoc, updateDoc, deleteDoc, where, query, CollectionReference, DocumentData, Query, orderBy } from "firebase/firestore";
-import { ICreateData, IDeleteData, IDeleteManyData, IGetList, IGetMany, IGetOne, IPropsDatabase, IUpdateData, IUpdateManyData, CrudOperators } from "./interfaces";
+import { ICreateData, IDeleteData, IDeleteManyData, IGetList, IGetMany, IGetOne, IDatabaseOptions, IUpdateData, IUpdateManyData, CrudOperators } from "./interfaces";
 import { BaseDatabase } from "./Database";
 
 
 export class FirestoreDatabase extends BaseDatabase {
     database: Firestore;
 
-    constructor (props?: IPropsDatabase) {
-        super(props);
-        this.database = getFirestore(props.firebaseApp);
+    constructor (options?: IDatabaseOptions, database?: Firestore) {
+        super(options);
+        this.database = database || getFirestore(options?.firebaseApp);
 
         this.getCollectionRef = this.getCollectionRef.bind(this);
         this.getFilterQuery = this.getFilterQuery.bind(this);
@@ -63,7 +63,7 @@ export class FirestoreDatabase extends BaseDatabase {
 
     async createManyData<TVariables = {}>(args: ICreateData<TVariables>): Promise<any> {
         try {
-            var data = await this.createData(args)
+            var data = await this.createData(args);
 
             return { data };
         } catch (error) {
@@ -84,7 +84,7 @@ export class FirestoreDatabase extends BaseDatabase {
     async deleteManyData(args: IDeleteManyData): Promise<any> {
         try {
             args.ids.forEach(async id => {
-                this.deleteData({ resource: args.resource, id })
+                this.deleteData({ resource: args.resource, id });
             });
         } catch (error) {
             Promise.reject(error);

@@ -6,9 +6,6 @@ declare interface ILoginArgs {
     remember: boolean;
 }
 
-declare interface ILoginProps {
-    setLocation: (location: string) => void;
-}
 
 declare interface IRegisterProps {
     setReCaptchaContainer: (ref: any) => void;
@@ -31,15 +28,6 @@ declare interface IAuthCallbacks {
 }
 
 declare type TLogoutData = void | false | string;
-declare interface IAuthContext {
-    login: (params: any) => Promise<any>;
-    logout: (params: any) => Promise<TLogoutData>;
-    checkAuth: (params?: any) => Promise<void>;
-    checkError: (error: any) => Promise<void>;
-    getPermissions: (params?: any) => Promise<any>;
-    getUserIdentity?: () => Promise<any>;
-    isProvided?: boolean;
-    [key: string]: any;
-}
 
-export { ILoginArgs, ILoginProps, IRegisterProps, IRegisterArgs, IUser, IAuthCallbacks, IAuthContext, TLogoutData };
+
+export { ILoginArgs, IRegisterProps, IRegisterArgs, IUser, IAuthCallbacks, TLogoutData };

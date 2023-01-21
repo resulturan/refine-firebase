@@ -1,14 +1,17 @@
-import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, updateEmail, updatePassword, getAuth, signOut, Auth, RecaptchaVerifier, updateProfile, sendEmailVerification, browserLocalPersistence, browserSessionPersistence, RecaptchaParameters, getIdTokenResult, ParsedToken, User as FirebaseUser } from "firebase/auth";
 import { FirebaseApp } from "@firebase/app";
-import { IRegisterArgs, ILoginArgs, IUser, IAuthCallbacks, IAuthContext } from "./interfaces";
+import { AuthProvider } from "@pankod/refine-core";
+import { Auth, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, getAuth, getIdTokenResult, ParsedToken, RecaptchaParameters, RecaptchaVerifier, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail, updatePassword, updateProfile, User as FirebaseUser } from "firebase/auth";
+import { IAuthCallbacks, ILoginArgs, IRegisterArgs, IUser } from "./interfaces";
 
 export class FirebaseAuth {
-
     auth: Auth;
-    authActions: IAuthCallbacks;
 
-    constructor (authActions?: IAuthCallbacks, firebaseApp?: FirebaseApp) {
-        this.auth = getAuth(firebaseApp);
+    constructor (
+        private readonly authActions?: IAuthCallbacks,
+        firebaseApp?: FirebaseApp,
+        auth?: Auth
+    ) {
+        this.auth = auth || getAuth(firebaseApp);
         this.auth.useDeviceLanguage();
 
         this.getAuthProvider = this.getAuthProvider.bind(this);
@@ -21,8 +24,6 @@ export class FirebaseAuth {
         this.handleCheckAuth = this.handleCheckAuth.bind(this);
         this.createRecaptcha = this.createRecaptcha.bind(this);
         this.getPermissions = this.getPermissions.bind(this);
-
-        this.authActions = authActions;
     }
 
     public async handleLogOut() {
@@ -102,12 +103,12 @@ export class FirebaseAuth {
             name: user?.displayName || ""
         };
     }
-    
+
     private getFirebaseUser(): Promise<FirebaseUser> {
         return new Promise<FirebaseUser>((resolve, reject) => {
             const unsubscribe = this.auth?.onAuthStateChanged(user => {
-            unsubscribe();
-            resolve(user);
+                unsubscribe();
+                resolve(user as FirebaseUser | PromiseLike<FirebaseUser>);
             }, reject);
         });
     }
@@ -122,8 +123,8 @@ export class FirebaseAuth {
 
     public async getPermissions(): Promise<ParsedToken> {
         if (this.auth?.currentUser) {
-            var idTokenResult = await getIdTokenResult(this.auth.currentUser);
-            return idTokenResult?.claims
+            const idTokenResult = await getIdTokenResult(this.auth.currentUser);
+            return idTokenResult?.claims;
         } else {
             return Promise.reject("User is not found");
         }
@@ -133,7 +134,7 @@ export class FirebaseAuth {
         return new RecaptchaVerifier(containerOrId, parameters, this.auth);
     }
 
-    public getAuthProvider(): IAuthContext {
+    public getAuthProvider(): AuthProvider {
         return {
             login: this.handleLogIn,
             logout: this.handleLogOut,

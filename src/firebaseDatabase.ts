@@ -1,5 +1,5 @@
 import { Database, get, getDatabase, ref, remove, set } from "firebase/database";
-import { ICreateData, IDeleteData, IDeleteManyData, IGetList, IGetMany, IGetOne, IPropsDatabase, IUpdateData, IUpdateManyData } from "./interfaces";
+import { ICreateData, IDeleteData, IDeleteManyData, IGetList, IGetMany, IGetOne, IDatabaseOptions, IUpdateData, IUpdateManyData } from "./interfaces";
 import { BaseDatabase } from "./Database";
 
 import { v4 as uuidv4 } from 'uuid';
@@ -8,9 +8,9 @@ import { v4 as uuidv4 } from 'uuid';
 export class FirebaseDatabase extends BaseDatabase {
     database: Database;
 
-    constructor (props?: IPropsDatabase) {
-        super(props);
-        this.database = getDatabase(props?.firebaseApp);
+    constructor (options?: IDatabaseOptions, database?: Database) {
+        super(options);
+        this.database = database || getDatabase(options?.firebaseApp);
         this.getRef = this.getRef.bind(this);
     }
 
@@ -137,9 +137,9 @@ export class FirebaseDatabase extends BaseDatabase {
             let data: Array<any> = [];
             args.ids.forEach(async (id: string) => {
                 const result = this.updateData({ resource: args.resource, variables: args.variables, id });
-                data.push(result)
+                data.push(result);
             });
-            return { data }
+            return { data };
 
         } catch (error) {
             Promise.reject(error);
