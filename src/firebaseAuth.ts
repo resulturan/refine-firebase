@@ -1,6 +1,6 @@
 import { FirebaseApp } from "@firebase/app";
 import { AuthProvider } from "@pankod/refine-core";
-import { Auth, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, getAuth, getIdTokenResult, ParsedToken, RecaptchaParameters, RecaptchaVerifier, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail, updatePassword, updateProfile, User as FirebaseUser } from "firebase/auth";
+import { Auth, inMemoryPersistence, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, getAuth, getIdTokenResult, ParsedToken, RecaptchaParameters, RecaptchaVerifier, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail, updatePassword, updateProfile, User as FirebaseUser } from "firebase/auth";
 import { IAuthCallbacks, ILoginArgs, IRegisterArgs, IUser } from "./interfaces";
 
 export class FirebaseAuth {
@@ -52,7 +52,7 @@ export class FirebaseAuth {
     public async handleLogIn({ email, password, remember }: ILoginArgs) {
         try {
             if (this.auth) {
-                await this.auth.setPersistence(remember ? browserLocalPersistence : browserSessionPersistence);
+                await this.auth.setPersistence(remember ? browserLocalPersistence : remember === false ? inMemoryPersistence : browserSessionPersistence);
 
                 const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
                 const userToken = await userCredential?.user?.getIdToken?.();
