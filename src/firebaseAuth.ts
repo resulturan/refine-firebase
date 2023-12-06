@@ -1,7 +1,8 @@
 import { FirebaseApp } from "@firebase/app";
 import { AuthProvider } from "@pankod/refine-core";
-import { Auth, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, getAuth, getIdTokenResult, ParsedToken, RecaptchaParameters, RecaptchaVerifier, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail, updatePassword, updateProfile, User as FirebaseUser } from "firebase/auth";
+import { Auth, inMemoryPersistence, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, getAuth, getIdTokenResult, ParsedToken, RecaptchaParameters, RecaptchaVerifier, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail, updatePassword, updateProfile, User as FirebaseUser } from "firebase/auth";
 import { IAuthCallbacks, ILoginArgs, IRegisterArgs, IUser } from "./interfaces";
+import { detectPlatform } from "./helpers/detectPlatform";
 
 export class FirebaseAuth {
     auth: Auth;
@@ -52,17 +53,23 @@ export class FirebaseAuth {
     public async handleLogIn({ email, password, remember }: ILoginArgs) {
         try {
             if (this.auth) {
-                await this.auth.setPersistence(remember ? browserLocalPersistence : browserSessionPersistence);
+                let persistance = browserSessionPersistence;
+                if (detectPlatform() === "react-native") {
+                    persistance = inMemoryPersistence;
+                } else if (remember) {
+                    persistance = browserLocalPersistence;
+                }
+                await this.auth.setPersistence(persistance);
 
                 const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
                 const userToken = await userCredential?.user?.getIdToken?.();
                 if (userToken) {
                     this.authActions?.onLogin?.(userCredential.user);
                 } else {
-                    return Promise.reject();
+                    return Promise.reject(new Error("User is not found"));
                 }
             } else {
-                return Promise.reject();
+                return Promise.reject(new Error("User is not found"));
             }
         } catch (error) {
             return Promise.reject(error);
@@ -117,7 +124,7 @@ export class FirebaseAuth {
         if (await this.getFirebaseUser()) {
             return Promise.resolve();
         } else {
-            return Promise.reject("User is not found");
+            return Promise.reject(new Error("User is not found"));
         }
     }
 
@@ -126,7 +133,7 @@ export class FirebaseAuth {
             const idTokenResult = await getIdTokenResult(this.auth.currentUser);
             return idTokenResult?.claims;
         } else {
-            return Promise.reject("User is not found");
+            return Promise.reject(new Error("User is not found"));
         }
     }
 
